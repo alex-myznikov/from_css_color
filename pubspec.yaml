@@ -1,0 +1,15 @@
+name: from_css_color
+description: Creates [Color] instance from CSS color string according to https://drafts.csswg.org/css-color-3
+version: 0.0.1
+homepage: https://github.com/alex-myznikov/from_css_color.git
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
