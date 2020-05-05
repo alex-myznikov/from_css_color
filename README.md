@@ -1,6 +1,6 @@
 # From CSS Color
 
-A package that creates [Color] instances from CSS color strings according to https://drafts.csswg.org/css-color-3.
+A package that creates Color instances from CSS color strings according to https://drafts.csswg.org/css-color-3.
 Hex, RGB and X11 keywords are supported. Work on HSL is in progress and should be ready up to the next release.
 
 ## Usage
@@ -15,7 +15,7 @@ Import the library.
 import 'package:from_css_color/from_css_color.dart';
 ```
 
-And use it anywhere you want to create a Color instance from CSS color definition format:
+And use it anywhere you want to create a Color from CSS color definition format:
 
 ```dart
 Container(
