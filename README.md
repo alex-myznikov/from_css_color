@@ -1,7 +1,7 @@
 # From CSS Color
 
 A package that creates Color instances from CSS color strings according to https://drafts.csswg.org/css-color-3.
-Hex, RGB and X11 keywords are supported. Work on HSL is in progress and should be ready up to the next release.
+Hex, RGB(A), HSL(A) and X11 keywords are supported.
 
 ## Usage
 

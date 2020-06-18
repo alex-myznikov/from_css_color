@@ -126,7 +126,8 @@ Color _hslToColor(String color) {
 
     return Color(result);
   } on FormatException catch (e) {
-    throw FormatException('Incorrect format of HSL color string.', '${e.message} ${e.source}');
+    throw FormatException(
+        'Incorrect format of HSL color string.', '${e.message} ${e.source}');
   }
 }
 
