@@ -1,3 +1,7 @@
+## 0.1.1
+
+* Update readme and file formatting.
+
 ## 0.1.0
 
 * Support for 'transparent' color keyword.
