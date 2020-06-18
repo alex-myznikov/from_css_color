@@ -1,3 +1,8 @@
+## 0.1.0
+
+* Support for 'transparent' color keyword.
+* Support for hsl/hsla colors.
+
 ## 0.0.1
 
 * Support for 3 and 6 digit hex colors.

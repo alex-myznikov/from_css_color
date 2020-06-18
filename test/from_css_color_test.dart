@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:from_css_color/from_css_color.dart';
@@ -68,6 +69,10 @@ void main() {
     expect(fromCSSColor('violet'), equals(Color(0xFFEE82EE)));
   });
 
+  test('Should create from "transparent" color keyword', () {
+    expect(fromCSSColor('transparent'), equals(Color(0x00000000)));
+  });
+
   test('Should throw format exception if the provided color format is unknown',
       () {
     expect(() => fromCSSColor('strangecolor'), throwsFormatException);
@@ -75,9 +80,41 @@ void main() {
     expect(() => fromCSSColor(''), throwsFormatException);
   });
 
-  test(
-      'Should throw format exception if support for the provided color format is not implemented',
-      () {
-    expect(() => fromCSSColor('hsl(123,100%,50%)'), throwsUnimplementedError);
+  test('Should create from correct hsl/hsla values', () {
+    expect(fromCSSColor('hsl(0,0%,0%)'), equals(Color(0xFF000000)));
+    expect(fromCSSColor('hsla(0,0%,0%,0)'), equals(Color(0x00000000)));
+    expect(fromCSSColor('hsl(0,100%,0%)'), equals(Color(0xFF000000)));
+    expect(fromCSSColor('hsl(0,100%,50%)'), equals(Color(0xFFFF0000)));
+    expect(fromCSSColor('hsl(360,100%,50%)'), equals(Color(0xFFFF0000)));
+    expect(fromCSSColor('hsl(720,100%,50%)'), equals(Color(0xFFFF0000)));
+    expect(fromCSSColor('hsl(120,100%,50%)'), equals(Color(0xFF00FF00)));
+    expect(fromCSSColor('hsl(240,100%,50%)'), equals(Color(0xFF0000FF)));
+    expect(fromCSSColor('hsl(-120,100%,50%)'), equals(Color(0xFF0000FF)));
+    expect(fromCSSColor('hsla(-120,100%,50%, .5)'), equals(Color(0x7F0000FF)));
+    expect(fromCSSColor('hsl(123,0%,100%)'), equals(Color(0xFFFFFFFF)));
+    expect(fromCSSColor('hsl(-120,100%,50%,0)'), equals(Color(0x000000FF)));
+    expect(fromCSSColor('hsl(-120,0%,50%)'), equals(Color(0xFF7F7F7F)));
+    expect(fromCSSColor('hsl(100,50%,10%)'), equals(Color(0xFF15260C)));
+    expect(fromCSSColor('hsl(100,54.99%,10.9%)'), equals(Color(0xFF162b0c)));
+    expect(fromCSSColor('hsl(343, 90%, 21%)'), equals(Color(0xFF650520)));
+    expect(fromCSSColor('hsla(100,100%,100%)'), equals(Color(0xFFFFFFFF)));
+    expect(fromCSSColor('hsl(0,110%,50%)'), equals(Color(0xFFFF0000)));
+    expect(fromCSSColor('hsl(0,-10%,50%)'), equals(Color(0xFF7F7F7F)));
+    expect(fromCSSColor('  hsl(0,0%,0%,1)'), equals(Color(0xFF000000)));
+  });
+
+  test('Should throw format exception on incorrect hsl/hsla values', () {
+    expect(() => fromCSSColor('hsla(0%,0,0)'), throwsFormatException);
+    expect(() => fromCSSColor('hsl(q,0%,0%)'), throwsFormatException);
+    expect(() => fromCSSColor('hsla(q,r,zcv)'), throwsFormatException);
+    expect(() => fromCSSColor('hsl(100,100)'), throwsFormatException);
+    expect(() => fromCSSColor('hsla(0%)'), throwsFormatException);
+    expect(() => fromCSSColor('hsl(0%,10%,5%,100%)'), throwsFormatException);
+    expect(() => fromCSSColor('hsla(0%,0,0,100%)'), throwsFormatException);
+    expect(() => fromCSSColor('hsl(q,0%,0%,q)'), throwsFormatException);
+    expect(() => fromCSSColor('hsl()'), throwsFormatException);
+    expect(() => fromCSSColor('hsla(((%^&*^(&*))'), throwsFormatException);
+    expect(() => fromCSSColor('hsl(-1000)'), throwsFormatException);
+    expect(() => fromCSSColor('hsla(1,10,5,)'), throwsFormatException);
   });
 }

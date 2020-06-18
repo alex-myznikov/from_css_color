@@ -1,6 +1,6 @@
 name: from_css_color
-description: Creates [Color] instance from CSS color string according to https://drafts.csswg.org/css-color-3
-version: 0.0.1
+description: Creates Color instance from CSS color string according to https://drafts.csswg.org/css-color-3
+version: 0.1.0
 homepage: https://github.com/alex-myznikov/from_css_color.git
 
 environment:

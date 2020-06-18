@@ -23,8 +23,7 @@ Color fromCSSColor(String color) {
     case ColorFormat.keyword:
       return Color(colorKeywords[color]);
     default:
-      throw UnimplementedError(
-          'HSL(A) feature will be implemented in version 0.1.0.');
+      return _hslToColor(color);
   }
 }
 
@@ -67,72 +66,113 @@ Color _hexToColor(String color) {
 
 /// Creates [Color] instance from RGB(A) color value.
 Color _rgbToColor(String color) {
-  var rgb =
-      color.substring(color.indexOf('(') + 1, color.length - 1).split(',');
+  var channels = _parseChannels(color);
   var result = 0xFF000000;
   var shift = 16;
 
-  if (rgb.length == 4) {
-    result =
-        (_opacityChannelToHex(double.parse(rgb.removeLast())) << 24) & result;
-  } else if (rgb.length != 3) {
+  if (channels.length == 4)
+    result = (_opacityChannelToHex(channels.removeLast()) << 24) & result;
+  else if (channels.length != 3)
     throw FormatException(
       'Incorrect number of values in RGB color string, there must be 3 or 4 of them.',
       color,
     );
-  }
 
-  if (_isPercentFormat(rgb)) {
-    for (var ch in rgb) {
-      ch = ch.substring(0, ch.length - 1);
-      result = (_rgbChannelPercentToHex(double.parse(ch)) << shift) | result;
+  if (_isPercentFormat(channels))
+    for (var ch in channels) {
+      result = (_rgbChannelPercentToHex(ch) << shift) | result;
       shift -= 8;
     }
-  } else {
-    for (var ch in rgb) {
-      result = (_rgbChannelNumToHex(double.parse(ch)) << shift) | result;
+  else
+    for (var ch in channels) {
+      result = (_rgbChannelNumToHex(ch) << shift) | result;
       shift -= 8;
     }
-  }
 
   return Color(result);
 }
 
 /// Creates [Color] instance from HSL(A) color value.
-// Color _hslToColor(String color) {
-//   var hsl =
-//       color.substring(color.indexOf('(') + 1, color.length - 1).split(',');
-//   var result = 0xFF000000;
-//   var shift = 16;
+Color _hslToColor(String color) {
+  var channels = _parseChannels(color);
+  var result = 0xFF000000;
+  var shift = 16;
 
-//   if (hsl.length == 4) {
-//     result =
-//         (_opacityChannelToHex(double.parse(hsl.removeLast())) << 24) & result;
-//   } else if (hsl.length != 3) {
-//     throw FormatException(
-//       'Incorrect number of values in HSL color string, there must be 3 or 4 of them.',
-//       color,
-//     );
-//   }
+  if (channels.length == 4)
+    result = (_opacityChannelToHex(channels.removeLast()) << 24) & result;
+  else if (channels.length != 3)
+    throw FormatException(
+      'Incorrect number of values in HSL color string, there must be 3 or 4 of them.',
+      color,
+    );
 
-// TODO: https://drafts.csswg.org/css-color-3/#hsla-color
+  try {
+    // Translate HSL to RGB according to CSS3 draft
+    final h = double.parse(channels[0]) % 360 / 360;
+    final s = _parsePercent(channels[1]) / 100;
+    final l = _parsePercent(channels[2]) / 100;
+    final m2 = l < 0.5 ? l * (s + 1) : l + s - l * s;
+    final m1 = l * 2 - m2;
+    final hexChannels = [
+      _hueToRGB(m1, m2, h + 1 / 3),
+      _hueToRGB(m1, m2, h),
+      _hueToRGB(m1, m2, h - 1 / 3),
+    ];
 
-//   return Color(result);
-// }
+    for (var ch in hexChannels) {
+      result = (ch << shift) | result;
+      shift -= 8;
+    }
 
-/// Converts RGB channel numeric [value] to hexadecimal form.
-int _rgbChannelNumToHex(num value) {
-  return value.clamp(0, 255).floor() & 0xFF;
+    return Color(result);
+  } on FormatException catch (e) {
+    throw FormatException('Incorrect format of HSL color string.', '${e.message} ${e.source}');
+  }
 }
 
-/// Converts RGB channel percentage [value] to hexadecimal form.
-int _rgbChannelPercentToHex(num value) {
-  return (value.clamp(0, 100) * 255 / 100).floor() & 0xFF;
+/// Parses channels from RGBA/HSLA string representation.
+List<String> _parseChannels(color) {
+  return color.substring(color.indexOf('(') + 1, color.length - 1).split(',');
 }
 
-/// Converts RGBA/HSLA opacity channel [value] to hexadecimal form.
-int _opacityChannelToHex(num value) {
-  return (value.clamp(0, 1) * 255).floor() & 0xFF;
+/// Parses numeric value from string [percent] representation.
+num _parsePercent(String percent) {
+  return (double.parse(percent.substring(0, percent.length - 1)).clamp(0, 100));
+}
+
+/// Converts RGB channel numeric [value] to hexadecimal integer form.
+int _rgbChannelNumToHex(String value) {
+  return double.parse(value).clamp(0, 255).floor() & 0xFF;
+}
+
+/// Converts RGB channel percentage [value] to hexadecimal integer form.
+int _rgbChannelPercentToHex(String value) {
+  return (_parsePercent(value) * 255 / 100).floor() & 0xFF;
+}
+
+/// Converts RGBA/HSLA opacity channel [value] to hexadecimal integer form.
+int _opacityChannelToHex(String value) {
+  return (double.parse(value).clamp(0, 1) * 255).floor() & 0xFF;
+}
+
+/// Converts hue parameters of HSL to RGB channel hexadecimal integer form.
+int _hueToRGB(num m1, num m2, num h) {
+  int result;
+
+  if (h < 0)
+    h = h + 1;
+  else if (h > 1) h = h - 1;
+
+  if (h * 6 < 1)
+    result = ((m1 + (m2 - m1) * h * 6) * 255).floor();
+  else if (h * 2 < 1)
+    result = (m2 * 255).floor();
+  else if (h * 3 < 2)
+    result = ((m1 + (m2 - m1) * (2 / 3 - h) * 6) * 255).floor();
+  else
+    result = (m1 * 255).floor();
+
+  return result & 0xFF;
 }
 
 /// Returns `true` if all [rgb] channels are in percent format, `false` in non of them, throws otherwise.
@@ -150,6 +190,7 @@ bool _isPercentFormat(List<String> rgb) {
 
 // A map of X11 color keywords and their 8-digit hexadecimal forms.
 Map<String, int> colorKeywords = {
+  "transparent": 0x00000000,
   "aliceblue": 0xFFF0F8FF,
   "antiquewhite": 0xFFFAEBD7,
   "aqua": 0xFF00FFFF,
