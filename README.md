@@ -1,6 +1,6 @@
 # From CSS Color
 
-A package that creates Color instances from CSS color strings according to https://drafts.csswg.org/css-color-3.
+A package that creates Flutter Color instances from CSS color strings according to https://drafts.csswg.org/css-color-3.
 Hex, RGB(A), HSL(A) and X11 keywords are supported.
 
 ## Usage
@@ -15,11 +15,16 @@ Import the library.
 import 'package:from_css_color/from_css_color.dart';
 ```
 
-And use it anywhere you want to create a Color from CSS color definition format:
+Use it anywhere you want to create a Color from CSS color definition format:
 
 ```dart
 Container(
   color: fromCSSColor('#ff00aa'),
+  // ...
+)
+
+Container(
+  color: fromCSSColor('rgb(100, 5, 32)'),
   // ...
 )
 ```

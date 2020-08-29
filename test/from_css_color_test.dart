@@ -14,6 +14,14 @@ void main() {
     expect(fromCSSColor('  #fba    '), equals(Color(0xFFFFBBAA)));
   });
 
+  test('Should create from correct 4 and 8 character hex values', () {
+    expect(fromCSSColor('#fbafbafa'), equals(Color(0xFAFBAFBA)));
+    expect(fromCSSColor('#f23b0c00'), equals(Color(0x00F23B0C)));
+    expect(fromCSSColor('#fbaa'), equals(Color(0xAAFFBBAA)));
+    expect(fromCSSColor('#fbaf'), equals(Color(0xFFFFBBAA)));
+    expect(fromCSSColor('  #fbac    '), equals(Color(0xCCFFBBAA)));
+  });
+
   test('Should throw format exception on incorrect hex values', () {
     expect(() => fromCSSColor('#fbafa'), throwsFormatException);
     expect(() => fromCSSColor('#f'), throwsFormatException);
@@ -21,6 +29,9 @@ void main() {
     expect(() => fromCSSColor('3ac57b'), throwsFormatException);
     expect(() => fromCSSColor('#hba'), throwsFormatException);
     expect(() => fromCSSColor('#1l4x5d'), throwsFormatException);
+    expect(() => fromCSSColor('#1l4x5dd'), throwsFormatException);
+    expect(() => fromCSSColor('#1b4a5d2x'), throwsFormatException);
+    expect(() => fromCSSColor('#1d4c5daab'), throwsFormatException);
   });
 
   test('Should create from correct rgb/rgba values', () {

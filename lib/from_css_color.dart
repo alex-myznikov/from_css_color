@@ -46,6 +46,15 @@ ColorFormat _recognizeCSSColorFormat(String color) {
 /// Creates [Color] instance from hexadecimal color value.
 Color _hexToColor(String color) {
   color = color.substring(1);
+  String alpha = 'FF';
+
+  if (color.length == 4) {
+    alpha = color[3] * 2;
+    color = color.substring(0, 3);
+  } else if (color.length == 8) {
+    alpha = color.substring(6);
+    color = color.substring(0, 6);
+  }
 
   if (color.length == 3)
     color = color.splitMapJoin('', onNonMatch: (m) => m * 2);
@@ -56,7 +65,11 @@ Color _hexToColor(String color) {
     );
 
   return Color(
-    0xFF000000 +
+    0x1000000 *
+            int.parse(
+              alpha,
+              radix: 16,
+            ) +
         int.parse(
           color,
           radix: 16,

@@ -1,3 +1,8 @@
+## 1.0.0
+
+* Add support for 4 (#rgba) and 8 (#rrggbbaa) digit hex colors.
+* Update versioning to stable after 3 months of usage in production (no breaking changes expected).
+
 ## 0.1.1
 
 * Update readme and file formatting.
