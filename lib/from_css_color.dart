@@ -43,6 +43,22 @@ ColorFormat _recognizeCSSColorFormat(String color) {
   throw FormatException('Unable to recognize this CSS color format.', color);
 }
 
+bool isCSSColor(String color) {
+  if (color.startsWith('#'))
+    return true;
+  else if (color.startsWith('rgba'))
+    return true;
+  else if (color.startsWith('rgb'))
+    return true;
+  else if (color.startsWith('hsla'))
+    return true;
+  else if (color.startsWith('hsl'))
+    return true;
+  else if (colorKeywords.containsKey(color)) return true;
+
+  return false;
+}
+
 /// Creates [Color] instance from hexadecimal color value.
 Color _hexToColor(String color) {
   color = color.substring(1);
