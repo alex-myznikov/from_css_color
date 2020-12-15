@@ -1,3 +1,7 @@
+## 1.1.0
+
+* Add `toCssColor()` extension method to convert Color instance to CSS color string.
+
 ## 1.0.0
 
 * Add support for 4 (#rgba) and 8 (#rrggbbaa) digit hex colors.

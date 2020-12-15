@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:from_css_color/from_css_color.dart';
 
 // create Color from hex
@@ -19,3 +20,12 @@ var hsla = fromCSSColor('hsla(-120,100%,50%, .5)'); // Color(0x7F0000FF)
 var navy = fromCSSColor('navy'); // Color(0xFF000080)
 var violet = fromCSSColor('violet'); // Color(0xFFEE82EE)
 var transparent = fromCSSColor('transparent'); // Color(0x00000000)
+
+// convert Color to CSS string
+var hexCss = Color(0xFFFBAFBA).toCssString(); // '#fbafba'
+var hexShortCss = Color(0xFFBBAAFF).toCssString(); // '#baf'
+var hexWithAlphaCss = Color(0xEFFFBBAA).toCssString(); // '#ffbbaaef'
+var rgbCss = Color(0xFFFFFFFF)
+    .toCssString(format: CssColorString.rgb); // 'rgb(255,255,255)'
+var rgbaCss = Color(0x7FFFFFFF)
+    .toCssString(format: CssColorString.rgb); // 'rgba(255,255,255,0.5)'
