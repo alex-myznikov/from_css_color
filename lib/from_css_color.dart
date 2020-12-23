@@ -44,19 +44,28 @@ ColorFormat _recognizeCSSColorFormat(String color) {
 }
 
 bool isCSSColor(String color) {
-  if (color.startsWith('#'))
+  String trimmedColor = color.replaceAll(' ', '');
+  print(trimmedColor.length);
+  if (RegExp(
+          r'^#([0-9abcdefgABCDEFG]{3}|[0-9abcdefgABCDEFG]{4}|[0-9abcdefgABCDEFG]{6}|[0-9abcdefgABCDEFG]{8})$')
+      .hasMatch(trimmedColor))
     return true;
-  else if (color.startsWith('rgba'))
+  else if (RegExp(
+          r'^rgba?\((-?[0-9]{1,3}(\.[0-9]+)?%),(-?[0-9]{1,3}(\.[0-9]+)?%),(-?[0-9]{1,3}(\.[0-9]+)?%)(,(-?[0-9]+(\.[0-9]+)?))?\)$')
+      .hasMatch(trimmedColor))
     return true;
-  else if (color.startsWith('rgb'))
+  else if (RegExp(
+          r'^rgba?\((-?[0-9]{1,3}(\.[0-9]+)?),(-?[0-9]{1,3}(\.[0-9]+)?),(-?[0-9]{1,3}(\.[0-9]+)?)(,(-?[0-9]+(\.[0-9]+)?))?\)$')
+      .hasMatch(trimmedColor))
     return true;
-  else if (color.startsWith('hsla'))
+  else if (RegExp(
+          r'^hsla?\((-?[0-9]{1,3}(\.[0-9]+)?),(-?[0-9]{1,3}(\.[0-9]+)?)%,(-?[0-9]{1,3}(\.[0-9]+)?)%(,[01]?(\.?[0-9]+)?)?\)$')
+      .hasMatch(trimmedColor))
     return true;
-  else if (color.startsWith('hsl'))
+  else if (colorKeywords.containsKey(trimmedColor))
     return true;
-  else if (colorKeywords.containsKey(color)) return true;
-
-  return false;
+  else
+    return false;
 }
 
 /// Creates [Color] instance from hexadecimal color value.
