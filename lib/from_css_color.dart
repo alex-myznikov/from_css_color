@@ -45,7 +45,6 @@ ColorFormat _recognizeCSSColorFormat(String color) {
 
 bool isCSSColor(String color) {
   String trimmedColor = color.replaceAll(' ', '');
-  print(trimmedColor.length);
   if (RegExp(
           r'^#([0-9abcdefgABCDEFG]{3}|[0-9abcdefgABCDEFG]{4}|[0-9abcdefgABCDEFG]{6}|[0-9abcdefgABCDEFG]{8})$')
       .hasMatch(trimmedColor))
