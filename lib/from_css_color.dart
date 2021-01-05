@@ -89,6 +89,30 @@ ColorFormat _recognizeCSSColorFormat(String color) {
   throw FormatException('Unable to recognize this CSS color format.', color);
 }
 
+bool isCSSColor(String color) {
+  String trimmedColor = color.replaceAll(' ', '');
+  if (RegExp(
+          r'^#([0-9abcdefgABCDEFG]{3}|[0-9abcdefgABCDEFG]{4}|[0-9abcdefgABCDEFG]{6}|[0-9abcdefgABCDEFG]{8})$')
+      .hasMatch(trimmedColor))
+    return true;
+  else if (RegExp(
+          r'^rgba?\((-?[0-9]{1,3}(\.[0-9]+)?%),(-?[0-9]{1,3}(\.[0-9]+)?%),(-?[0-9]{1,3}(\.[0-9]+)?%)(,(-?[0-9]+(\.[0-9]+)?))?\)$')
+      .hasMatch(trimmedColor))
+    return true;
+  else if (RegExp(
+          r'^rgba?\((-?[0-9]{1,3}(\.[0-9]+)?),(-?[0-9]{1,3}(\.[0-9]+)?),(-?[0-9]{1,3}(\.[0-9]+)?)(,(-?[0-9]+(\.[0-9]+)?))?\)$')
+      .hasMatch(trimmedColor))
+    return true;
+  else if (RegExp(
+          r'^hsla?\((-?[0-9]{1,3}(\.[0-9]+)?),(-?[0-9]{1,3}(\.[0-9]+)?)%,(-?[0-9]{1,3}(\.[0-9]+)?)%(,[01]?(\.?[0-9]+)?)?\)$')
+      .hasMatch(trimmedColor))
+    return true;
+  else if (colorKeywords.containsKey(trimmedColor))
+    return true;
+  else
+    return false;
+}
+
 /// Creates [Color] instance from hexadecimal color value.
 Color _hexToColor(String color) {
   color = color.substring(1);
