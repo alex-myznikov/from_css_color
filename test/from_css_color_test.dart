@@ -6,11 +6,70 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:from_css_color/from_css_color.dart';
 
 void main() {
-  group('fromCSSColor tests', () {
+  group('toCssColor', () {
+    test('Should convert Color instance to CSS hex string by default', () {
+      expect(fromCSSColor('#fbafba').toCssString(), equals('#fbafba'));
+      expect(fromCSSColor('#f23b0c').toCssString(), equals('#f23b0c'));
+      expect(fromCSSColor('#ffbbac').toCssString(), equals('#ffbbac'));
+      expect(fromCSSColor('#fbafbacc').toCssString(), equals('#fbafbacc'));
+      expect(fromCSSColor('#ffbbaa').toCssString(), equals('#fba'));
+      expect(fromCSSColor('#ffbbaacd').toCssString(), equals('#ffbbaacd'));
+      expect(fromCSSColor('#fba').toCssString(), equals('#fba'));
+      expect(fromCSSColor('  #fba    ').toCssString(), equals('#fba'));
+      expect(fromCSSColor('#efba').toCssString(), equals('#efba'));
+      expect(fromCSSColor('#efbf').toCssString(), equals('#efb'));
+      expect(Color(0xFFBBAA).toCssString(), equals('#fba0'));
+      expect(Color(0xFFBBAAFF).toCssString(), equals('#baf'));
+      expect(Color(0xEFFFBBAA).toCssString(), equals('#ffbbaaef'));
+      expect(Color(0xFFFBAFBA).toCssString(), equals('#fbafba'));
+      expect(Color(0).toCssString(), equals('#0000'));
+      expect(Color(0xF).toCssString(), equals('#00000f00'));
+    });
+
+    test('Should convert Color instance to RGB/RGBA string', () {
+      expect(fromCSSColor('rgb(0,0,0)').toCssString(format: CssColorString.rgb),
+          equals('rgb(0,0,0)'));
+      expect(
+          fromCSSColor('rgba(0%,0%,0%)').toCssString(format: CssColorString.rgb),
+          equals('rgb(0,0,0)'));
+      expect(
+          fromCSSColor('rgb(255,255,255)')
+              .toCssString(format: CssColorString.rgb),
+          equals('rgb(255,255,255)'));
+      expect(
+          fromCSSColor('rgb(255,255,255,0.5)')
+              .toCssString(format: CssColorString.rgb),
+          equals('rgba(255,255,255,0.5)'));
+      expect(
+          fromCSSColor('rgba(100%,100%,100%)')
+              .toCssString(format: CssColorString.rgb),
+          equals('rgb(255,255,255)'));
+      expect(
+          fromCSSColor('rgb(100,5,32)').toCssString(format: CssColorString.rgb),
+          equals('rgb(100,5,32)'));
+      expect(
+          fromCSSColor('rgba(2.6,0.4,265.5)')
+              .toCssString(format: CssColorString.rgb),
+          equals('rgb(2,0,255)'));
+      expect(
+          fromCSSColor('rgba(255,-10,0) ')
+              .toCssString(format: CssColorString.rgb),
+          equals('rgb(255,0,0)'));
+      expect(
+          fromCSSColor('rgba(0%,0%,0%,0)')
+              .toCssString(format: CssColorString.rgb),
+          equals('rgba(0,0,0,0)'));
+      expect(Color(0xFFFFFFFF).toCssString(format: CssColorString.rgb),
+          equals('rgb(255,255,255)'));
+      expect(Color(0x7FFFFFFF).toCssString(format: CssColorString.rgb),
+          equals('rgba(255,255,255,0.5)'));
+    });
+  });
+
+  group('fromCSSColor', () {
     test('Should create from correct 3 and 6 character hex values', () {
       expect(fromCSSColor('#fbafba'), equals(Color(0xFFFBAFBA)));
       expect(fromCSSColor('#f23b0c'), equals(Color(0xFFF23B0C)));
-      expect(fromCSSColor('#fba'), equals(Color(0xFFFFBBAA)));
       expect(fromCSSColor('#fba'), equals(Color(0xFFFFBBAA)));
       expect(fromCSSColor('  #fba    '), equals(Color(0xFFFFBBAA)));
     });
@@ -133,7 +192,7 @@ void main() {
     });
   });
 
-  group('isCSSColor tests', () {
+  group('isCSSColor', () {
     test('Should return true for correct 3 and 6 character hex values', () {
       expect(isCSSColor('#fbafba'), equals(true));
       expect(isCSSColor('#f23b0c'), equals(true));

@@ -1,5 +1,51 @@
 import 'dart:ui';
 
+/// Translation options from [Color] to a string format recognizable according to https://drafts.csswg.org/css-color-3 and forthcoming drafts.
+enum CssColorString {
+  /// Hex format that truncates to a short form (3-4 digits) if possible and contains alpha digits if color is not fully opaque.
+  hex,
+
+  /// RGB/RGBA format that contains alpha value if color is not fully opaque.
+  rgb,
+}
+
+/// Adds [toCssString] method on instance of [Color].
+extension ConversionToCssString on Color {
+  /// Returns a CSS color string representation of this [Color].
+  // ignore: missing_return
+  String toCssString({CssColorString format = CssColorString.hex}) {
+    switch (format) {
+      case CssColorString.hex:
+        final value = this.value.toRadixString(16).padLeft(8, '0');
+        var r = value.substring(2, 4);
+        var g = value.substring(4, 6);
+        var b = value.substring(6, 8);
+        var a = value.substring(0, 2);
+        if (format == CssColorString.hex &&
+            r[0] == r[1] &&
+            g[0] == g[1] &&
+            b[0] == b[1] &&
+            a[0] == a[1]) {
+          r = r[0];
+          g = g[0];
+          b = b[0];
+          a = a[0];
+        }
+
+        return '#$r$g$b${['ff', 'f'].contains(a) ? '' : a}';
+      case CssColorString.rgb:
+        var r = this.red;
+        var g = this.green;
+        var b = this.blue;
+        var a = this.opacity;
+
+        return a == 1
+            ? 'rgb($r,$g,$b)'
+            : 'rgba($r,$g,$b,${a == 0 || a == 1 ? a.toInt() : (a * 100).round() / 100})';
+    }
+  }
+}
+
 /// Color formats available to construct [Color] instance from.
 enum ColorFormat {
   hex,
@@ -180,17 +226,17 @@ num _parsePercent(String percent) {
 
 /// Converts RGB channel numeric [value] to hexadecimal integer form.
 int _rgbChannelNumToHex(String value) {
-  return double.parse(value).clamp(0, 255).floor() & 0xFF;
+  return double.parse(value).clamp(0, 255).floor();
 }
 
 /// Converts RGB channel percentage [value] to hexadecimal integer form.
 int _rgbChannelPercentToHex(String value) {
-  return (_parsePercent(value) * 255 / 100).floor() & 0xFF;
+  return (_parsePercent(value) * 255 / 100).floor();
 }
 
 /// Converts RGBA/HSLA opacity channel [value] to hexadecimal integer form.
 int _opacityChannelToHex(String value) {
-  return (double.parse(value).clamp(0, 1) * 255).floor() & 0xFF;
+  return (double.parse(value).clamp(0, 1) * 255).floor();
 }
 
 /// Converts hue parameters of HSL to RGB channel hexadecimal integer form.
@@ -210,7 +256,7 @@ int _hueToRGB(num m1, num m2, num h) {
   else
     result = (m1 * 255).floor();
 
-  return result & 0xFF;
+  return result;
 }
 
 /// Returns `true` if all [rgb] channels are in percent format, `false` in non of them, throws otherwise.
