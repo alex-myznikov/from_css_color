@@ -6,8 +6,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:from_css_color/from_css_color.dart';
 
 void main() {
-  group('toCssColor', () {
-    test('Should convert Color instance to CSS hex string by default', () {
+  group('toCssColor:', () {
+    test('should convert Color instance to CSS hex string by default', () {
       expect(fromCSSColor('#fbafba').toCssString(), equals('#fbafba'));
       expect(fromCSSColor('#f23b0c').toCssString(), equals('#f23b0c'));
       expect(fromCSSColor('#ffbbac').toCssString(), equals('#ffbbac'));
@@ -26,7 +26,7 @@ void main() {
       expect(Color(0xF).toCssString(), equals('#00000f00'));
     });
 
-    test('Should convert Color instance to RGB/RGBA string', () {
+    test('should convert Color instance to RGB/RGBA string', () {
       expect(fromCSSColor('rgb(0,0,0)').toCssString(format: CssColorString.rgb),
           equals('rgb(0,0,0)'));
       expect(
@@ -66,15 +66,15 @@ void main() {
     });
   });
 
-  group('fromCSSColor', () {
-    test('Should create from correct 3 and 6 character hex values', () {
+  group('fromCSSColor:', () {
+    test('should create from correct 3 and 6 character hex values', () {
       expect(fromCSSColor('#fbafba'), equals(Color(0xFFFBAFBA)));
       expect(fromCSSColor('#f23b0c'), equals(Color(0xFFF23B0C)));
       expect(fromCSSColor('#fba'), equals(Color(0xFFFFBBAA)));
       expect(fromCSSColor('  #fba    '), equals(Color(0xFFFFBBAA)));
     });
 
-    test('Should create from correct 4 and 8 character hex values', () {
+    test('should create from correct 4 and 8 character hex values', () {
       expect(fromCSSColor('#fbafbafa'), equals(Color(0xFAFBAFBA)));
       expect(fromCSSColor('#f23b0c00'), equals(Color(0x00F23B0C)));
       expect(fromCSSColor('#fbaa'), equals(Color(0xAAFFBBAA)));
@@ -82,7 +82,7 @@ void main() {
       expect(fromCSSColor('  #fbac    '), equals(Color(0xCCFFBBAA)));
     });
 
-    test('Should throw format exception on incorrect hex values', () {
+    test('should throw format exception on incorrect hex values', () {
       expect(() => fromCSSColor('#fbafa'), throwsFormatException);
       expect(() => fromCSSColor('#f'), throwsFormatException);
       expect(() => fromCSSColor('#'), throwsFormatException);
@@ -92,9 +92,10 @@ void main() {
       expect(() => fromCSSColor('#1l4x5dd'), throwsFormatException);
       expect(() => fromCSSColor('#1b4a5d2x'), throwsFormatException);
       expect(() => fromCSSColor('#1d4c5daab'), throwsFormatException);
+      expect(() => fromCSSColor('#1d4 c5d'), throwsFormatException);
     });
 
-    test('Should create from correct rgb/rgba values', () {
+    test('should create from correct rgb/rgba values', () {
       expect(fromCSSColor('rgb(0,0,0)'), equals(Color(0xFF000000)));
       expect(fromCSSColor('rgba(0%,0%,0%)'), equals(Color(0xFF000000)));
       expect(fromCSSColor('rgb(255,255,255)'), equals(Color(0xFFFFFFFF)));
@@ -117,7 +118,7 @@ void main() {
       expect(fromCSSColor('rgba(110%,0%,0%)'), equals(Color(0xFFFF0000)));
     });
 
-    test('Should throw format exception on incorrect rgb/rgba values', () {
+    test('should throw format exception on incorrect rgb/rgba values', () {
       expect(() => fromCSSColor('rgba(0%,0,0)'), throwsFormatException);
       expect(() => fromCSSColor('rgb(q,0%,0%)'), throwsFormatException);
       expect(() => fromCSSColor('rgba(q,r,zcv)'), throwsFormatException);
@@ -132,7 +133,7 @@ void main() {
       expect(() => fromCSSColor('rgba(1,10,5,)'), throwsFormatException);
     });
 
-    test('Should create from extended color keywords', () {
+    test('should create from extended color keywords', () {
       expect(fromCSSColor('darkgray'), equals(Color(0xFFA9A9A9)));
       expect(fromCSSColor('bisque'), equals(Color(0xFFFFE4C4)));
       expect(fromCSSColor('mediumslateblue'), equals(Color(0xFF7B68EE)));
@@ -140,19 +141,19 @@ void main() {
       expect(fromCSSColor('violet'), equals(Color(0xFFEE82EE)));
     });
 
-    test('Should create from "transparent" color keyword', () {
+    test('should create from "transparent" color keyword', () {
       expect(fromCSSColor('transparent'), equals(Color(0x00000000)));
     });
 
     test(
-        'Should throw format exception if the provided color format is unknown',
+        'should throw format exception if the provided color format is unknown',
         () {
       expect(() => fromCSSColor('strangecolor'), throwsFormatException);
       expect(() => fromCSSColor('12'), throwsFormatException);
       expect(() => fromCSSColor(''), throwsFormatException);
     });
 
-    test('Should create from correct hsl/hsla values', () {
+    test('should create from correct hsl/hsla values', () {
       expect(fromCSSColor('hsl(0,0%,0%)'), equals(Color(0xFF000000)));
       expect(fromCSSColor('hsla(0,0%,0%,0)'), equals(Color(0x00000000)));
       expect(fromCSSColor('hsl(0,100%,0%)'), equals(Color(0xFF000000)));
@@ -176,7 +177,7 @@ void main() {
       expect(fromCSSColor('  hsl(0,0%,0%,1)'), equals(Color(0xFF000000)));
     });
 
-    test('Should throw format exception on incorrect hsl/hsla values', () {
+    test('should throw format exception on incorrect hsl/hsla values', () {
       expect(() => fromCSSColor('hsla(0%,0,0)'), throwsFormatException);
       expect(() => fromCSSColor('hsl(q,0%,0%)'), throwsFormatException);
       expect(() => fromCSSColor('hsla(q,r,zcv)'), throwsFormatException);
@@ -192,16 +193,15 @@ void main() {
     });
   });
 
-  group('isCSSColor', () {
-    test('Should return true for correct 3 and 6 character hex values', () {
+  group('isCSSColor:', () {
+    test('should return true for correct 3 and 6 character hex values', () {
       expect(isCSSColor('#fbafba'), equals(true));
       expect(isCSSColor('#f23b0c'), equals(true));
-      expect(isCSSColor('#fba'), equals(true));
       expect(isCSSColor('#fba'), equals(true));
       expect(isCSSColor('  #fba    '), equals(true));
     });
 
-    test('Should return true for correct 4 and 8 character hex values', () {
+    test('should return true for correct 4 and 8 character hex values', () {
       expect(isCSSColor('#fbafbafa'), equals(true));
       expect(isCSSColor('#f23b0c00'), equals(true));
       expect(isCSSColor('#fbaa'), equals(true));
@@ -209,7 +209,7 @@ void main() {
       expect(isCSSColor('  #fbac    '), equals(true));
     });
 
-    test('Should return false for incorrect hex values', () {
+    test('should return false for incorrect hex values', () {
       expect(isCSSColor('#fbafa'), equals(false));
       expect(isCSSColor('#f'), equals(false));
       expect(isCSSColor('#'), equals(false));
@@ -219,9 +219,10 @@ void main() {
       expect(isCSSColor('#1l4x5dd'), equals(false));
       expect(isCSSColor('#1b4a5d2x'), equals(false));
       expect(isCSSColor('#1d4c5daab'), equals(false));
+      expect(isCSSColor('#1d4 c5d'), equals(false));
     });
 
-    test('Should return true for correct rgb/rgba values', () {
+    test('should return true for correct rgb/rgba values', () {
       expect(isCSSColor('rgb(0,0,0)'), equals(true));
       expect(isCSSColor('rgba(0%,0%,0%)'), equals(true));
       expect(isCSSColor('rgb(255,255,255)'), equals(true));
@@ -243,7 +244,7 @@ void main() {
       expect(isCSSColor('rgba(110%,0%,0%)'), equals(true));
     });
 
-    test('Should return false for incorrect rgb/rgba values', () {
+    test('should return false for incorrect rgb/rgba values', () {
       expect(isCSSColor('rgba(0%,0,0)'), equals(false));
       expect(isCSSColor('rgb(q,0%,0%)'), equals(false));
       expect(isCSSColor('rgba(q,r,zcv)'), equals(false));
@@ -258,7 +259,7 @@ void main() {
       expect(isCSSColor('rgba(1,10,5,)'), equals(false));
     });
 
-    test('Should return true for extended color keywords', () {
+    test('should return true for extended color keywords', () {
       expect(isCSSColor('darkgray'), equals(true));
       expect(isCSSColor('bisque'), equals(true));
       expect(isCSSColor('mediumslateblue'), equals(true));
@@ -266,17 +267,17 @@ void main() {
       expect(isCSSColor('violet'), equals(true));
     });
 
-    test('Should return true from "transparent" color keyword', () {
+    test('should return true from "transparent" color keyword', () {
       expect(isCSSColor('transparent'), equals(true));
     });
 
-    test('Should return false if the provided color format is unknown', () {
+    test('should return false if the provided color format is unknown', () {
       expect(isCSSColor('strangecolor'), equals(false));
       expect(isCSSColor('12'), equals(false));
       expect(isCSSColor(''), equals(false));
     });
 
-    test('Should return true for correct hsl/hsla values', () {
+    test('should return true for correct hsl/hsla values', () {
       expect(isCSSColor('hsl(0,0%,0%)'), equals(true));
       expect(isCSSColor('hsla(0,0%,0%,0)'), equals(true));
       expect(isCSSColor('hsl(0,100%,0%)'), equals(true));
@@ -299,7 +300,7 @@ void main() {
       expect(isCSSColor('  hsl(0,0%,0%,1)'), equals(true));
     });
 
-    test('Should return false for incorrect hsl/hsla values', () {
+    test('should return false for incorrect hsl/hsla values', () {
       expect(isCSSColor('hsla(0%,0,0)'), equals(false));
       expect(isCSSColor('hsl(q,0%,0%)'), equals(false));
       expect(isCSSColor('hsla(q,r,zcv)'), equals(false));

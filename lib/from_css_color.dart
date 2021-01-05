@@ -11,7 +11,7 @@ enum CssColorString {
 
 /// Adds [toCssString] method on instance of [Color].
 extension ConversionToCssString on Color {
-  /// Returns a CSS color string representation of this [Color].
+  /// Return a CSS color string representation of this [Color].
   // ignore: missing_return
   String toCssString({CssColorString format = CssColorString.hex}) {
     switch (format) {
@@ -56,7 +56,7 @@ enum ColorFormat {
   keyword,
 }
 
-/// Creates [Color] instance from CSS color string according to https://drafts.csswg.org/css-color-3
+/// Create [Color] instance from CSS color string according to https://drafts.csswg.org/css-color-3
 Color fromCSSColor(String color) {
   color = color.trim();
 
@@ -89,25 +89,29 @@ ColorFormat _recognizeCSSColorFormat(String color) {
   throw FormatException('Unable to recognize this CSS color format.', color);
 }
 
+/// Check correctness of color string according to https://drafts.csswg.org/css-color-3
 bool isCSSColor(String color) {
-  String trimmedColor = color.replaceAll(' ', '');
+  color = color.trim();
+  final chNumExpr = '-?[0-9]{1,3}(\\.[0-9]+)?';
+  final opNumExpr = '-?([01]+(\\.[0-9]+)?|\\.[0-9]+)';
+
   if (RegExp(
-          r'^#([0-9abcdefgABCDEFG]{3}|[0-9abcdefgABCDEFG]{4}|[0-9abcdefgABCDEFG]{6}|[0-9abcdefgABCDEFG]{8})$')
-      .hasMatch(trimmedColor))
+          r'^#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$')
+      .hasMatch(color))
     return true;
   else if (RegExp(
-          r'^rgba?\((-?[0-9]{1,3}(\.[0-9]+)?%),(-?[0-9]{1,3}(\.[0-9]+)?%),(-?[0-9]{1,3}(\.[0-9]+)?%)(,(-?[0-9]+(\.[0-9]+)?))?\)$')
-      .hasMatch(trimmedColor))
+          '^rgba?\\($chNumExpr%,\\s?$chNumExpr%,\\s?$chNumExpr%(,\\s?$opNumExpr)?\\)\$')
+      .hasMatch(color))
     return true;
   else if (RegExp(
-          r'^rgba?\((-?[0-9]{1,3}(\.[0-9]+)?),(-?[0-9]{1,3}(\.[0-9]+)?),(-?[0-9]{1,3}(\.[0-9]+)?)(,(-?[0-9]+(\.[0-9]+)?))?\)$')
-      .hasMatch(trimmedColor))
+          '^rgba?\\($chNumExpr,\\s?$chNumExpr,\\s?$chNumExpr(,\\s?$opNumExpr)?\\)\$')
+      .hasMatch(color))
     return true;
   else if (RegExp(
-          r'^hsla?\((-?[0-9]{1,3}(\.[0-9]+)?),(-?[0-9]{1,3}(\.[0-9]+)?)%,(-?[0-9]{1,3}(\.[0-9]+)?)%(,[01]?(\.?[0-9]+)?)?\)$')
-      .hasMatch(trimmedColor))
+          '^hsla?\\($chNumExpr,\\s?$chNumExpr%,\\s?$chNumExpr%(,\\s?$opNumExpr)?\\)\$')
+      .hasMatch(color))
     return true;
-  else if (colorKeywords.containsKey(trimmedColor))
+  else if (colorKeywords.containsKey(color))
     return true;
   else
     return false;
