@@ -1,3 +1,7 @@
+## 1.2.0
+
+* Add `isCssColor()` function to check color string format correctness.
+
 ## 1.1.0
 
 * Add `toCssColor()` extension method to convert Color instance to CSS color string.

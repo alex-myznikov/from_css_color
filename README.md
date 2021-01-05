@@ -21,12 +21,12 @@ Use it anywhere you want to create a Color from CSS color definition format:
 
 ```dart
 Container(
-  color: fromCSSColor('#ff00aa'),
+  color: fromCssColor('#ff00aa'),
   // ...
 )
 
 Container(
-  color: fromCSSColor('rgb(100, 5, 32)'),
+  color: fromCssColor('rgb(100, 5, 32)'),
   // ...
 )
 ```
@@ -37,6 +37,12 @@ Convert Color back to CSS string:
 final color = const Color(0xFFFBAFBA);
 
 color.toCssString(); // '#fbafba'
+```
+
+Check CSS color string correctness:
+
+```dart
+isCssColor('#ff00aa'); // true
 ```
 
 Visit examples for more details.

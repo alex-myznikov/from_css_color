@@ -56,11 +56,10 @@ enum ColorFormat {
   keyword,
 }
 
-/// Create [Color] instance from CSS color string according to https://drafts.csswg.org/css-color-3
-Color fromCSSColor(String color) {
+Color fromCssColor(String color) {
   color = color.trim();
 
-  switch (_recognizeCSSColorFormat(color)) {
+  switch (_recognizeCssColorFormat(color)) {
     case ColorFormat.hex:
       return _hexToColor(color);
     case ColorFormat.rgb:
@@ -73,7 +72,15 @@ Color fromCSSColor(String color) {
   }
 }
 
-ColorFormat _recognizeCSSColorFormat(String color) {
+@Deprecated('Call fromCssColor() instead.'
+    'This feature was deprecated since v1.2.0 to meet the https://dart.dev/guides/language/effective-dart/style#do-capitalize-acronyms-and-abbreviations-longer-than-two-letters-like-words')
+
+/// Create [Color] instance from CSS color string according to https://drafts.csswg.org/css-color-3
+Color fromCSSColor(String color) {
+  return fromCssColor(color);
+}
+
+ColorFormat _recognizeCssColorFormat(String color) {
   if (color.startsWith('#'))
     return ColorFormat.hex;
   else if (color.startsWith('rgba'))
@@ -90,7 +97,7 @@ ColorFormat _recognizeCSSColorFormat(String color) {
 }
 
 /// Check correctness of color string according to https://drafts.csswg.org/css-color-3
-bool isCSSColor(String color) {
+bool isCssColor(String color) {
   color = color.trim();
   final chNumExpr = '-?[0-9]{1,3}(\\.[0-9]+)?';
   final opNumExpr = '-?([01]+(\\.[0-9]+)?|\\.[0-9]+)';
@@ -115,6 +122,14 @@ bool isCSSColor(String color) {
     return true;
   else
     return false;
+}
+
+@Deprecated('Call isCssColor() instead.'
+    'This feature was deprecated since v1.2.0 to meet the https://dart.dev/guides/language/effective-dart/style#do-capitalize-acronyms-and-abbreviations-longer-than-two-letters-like-words')
+
+/// Check correctness of color string according to https://drafts.csswg.org/css-color-3
+bool isCSSColor(String color) {
+  return isCssColor(color);
 }
 
 /// Creates [Color] instance from hexadecimal color value.
