@@ -66,7 +66,7 @@ Color fromCssColor(String color) {
     case ColorFormat.rgba:
       return _rgbToColor(color);
     case ColorFormat.keyword:
-      return Color(colorKeywords[color]);
+      return Color(colorKeywords[color]!);
     default:
       return _hslToColor(color);
   }
@@ -168,7 +168,7 @@ Color _hexToColor(String color) {
 
 /// Creates [Color] instance from RGB(A) color value.
 Color _rgbToColor(String color) {
-  var channels = _parseChannels(color);
+  var channels = _parseChannels(color)!;
   var result = 0xFF000000;
   var shift = 16;
 
@@ -196,7 +196,7 @@ Color _rgbToColor(String color) {
 
 /// Creates [Color] instance from HSL(A) color value.
 Color _hslToColor(String color) {
-  var channels = _parseChannels(color);
+  var channels = _parseChannels(color)!;
   var result = 0xFF000000;
   var shift = 16;
 
@@ -234,7 +234,7 @@ Color _hslToColor(String color) {
 }
 
 /// Parses channels from RGBA/HSLA string representation.
-List<String> _parseChannels(color) {
+List<String>? _parseChannels(color) {
   return color.substring(color.indexOf('(') + 1, color.length - 1).split(',');
 }
 
